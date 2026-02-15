@@ -1,5 +1,3 @@
-name: Workflow Demo
-
 on: [push]
 
 jobs:
@@ -18,3 +16,20 @@ jobs:
       with:
         name: hello-artifact
         path: hello.txt
+
+  download:
+    runs-on: ubuntu-latest
+    needs: build   # ensures this job runs AFTER 'build' job
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Download artifact
+      uses: actions/download-artifact@v4
+      with:
+        name: hello-artifact
+        path: ./artifacts   # place downloaded file here
+
+    - name: Workflow Demo - Display file
+      run: cat ./artifacts/hello.txt
+
